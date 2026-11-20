@@ -11,10 +11,14 @@
 // MAKEFUN_OUTPUT_DIR at a folder to stand in for it:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { copyFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const imageBesideThisFile = new URL('./entry.png', import.meta.url);
 const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+
+// The grader hands the program a ready output folder; anywhere else the folder may
+// not exist yet, so make it rather than fail on a missing directory.
+mkdirSync(outputDir, { recursive: true });
 
 copyFileSync(imageBesideThisFile, join(outputDir, 'entry.png'));
